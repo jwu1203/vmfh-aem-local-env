@@ -1,57 +1,73 @@
 # $ docker-compose -p aem up -d
 #
 
-version: '3'
+version: "3.7"
 
 services:
-        author:
-                build: .
-                ports:
-                        - "4502:4502"
-                        - "30303:30303"
-                          #restart: unless-stopped
-                volumes:
-                        - ./license.properties:/opt/aem/license.properties:ro
-                        - ./author/quickstart:/opt/aem/crx-quickstart/bin/quickstartMe
-                        - ./author/stop:/opt/aem/crx-quickstart/bin/stopme
-                        - ./runstop:/opt/aem/runstop
-                          #        - ./dependencies:/opt/aem/crx-quickstart/install  
-                        - ./logs/author:/opt/aem/crx-quickstart/logs
-                command: '/opt/aem/crx-quickstart/bin/quickstartMe'
-        publish:
-                build: .
-                ports:
-                        - "4503:4503"
-                        - "30302:30302"
-                          #restart: unless-stopped
-                volumes:
-                        - ./license.properties:/opt/aem/license.properties:ro
-                        - ./publish/quickstart:/opt/aem/crx-quickstart/bin/quickstartMe
-                        - ./publish/stop:/opt/aem/crx-quickstart/bin/stopme
-                        - ./runstop:/opt/aem/runstop
-                          #        - ./dependencies:/opt/aem/crx-quickstart/install  
-                        - ./logs/publish:/opt/aem/crx-quickstart/logs
-                command: '/opt/aem/crx-quickstart/bin/quickstartMe'
-                #        dispatcher:
-                #                build: ./dispatcher
-                #                ports:
-                #                        - "80:80"               
-                #                volumes:
-                #                        - ./dispatcher/conf/apache/conf:/usr/local/apache2/conf
-                #                        - ./dispatcher/conf/apache/conf.d:/usr/local/apache2/conf.d
-                #                        - ./dispatcher/conf/apache/conf.dispatcher.d:/usr/local/apache2/conf.dispatcher.d
-                #                        - ./dispatcher/conf/apache/conf.modules.d:/usr/local/apache2/conf.modules.d
-                #                        - ./logs/dispatcher:/usr/local/apache2/logs
-                          #entrypoint: ["sh", "-c", "sleep 2073600"]
-        portainer:
-                image: portainer/portainer
-                command: -H unix:///var/run/docker.sock
-                restart: always
-                ports:
-                        - 9000:9000
-                volumes:
-                        - /var/run/docker.sock:/var/run/docker.sock
-                        - portainer_data:/data
-
+  author:
+    build: .
+    ports:
+      - "4502:4502"
+      - "30303:30303"
+    networks:
+      local_net:
+        ipv4_address: 172.28.0.2
+    volumes:
+      - ./license.properties:/opt/aem/license.properties:ro
+      - ./author/quickstart:/opt/aem/crx-quickstart/bin/quickstartMe
+      - ./author/stop:/opt/aem/crx-quickstart/bin/stopme
+      - ./runstop:/opt/aem/runstop
+      - ./dependencies:/opt/aem/crx-quickstart/install
+      - ./logs/author:/opt/aem/crx-quickstart/logs
+    command: '/opt/aem/crx-quickstart/bin/quickstartMe'
+  publish:
+    build: .
+    ports:
+      - "4503:4503"
+      - "30302:30302"
+    networks:
+      local_net:
+        ipv4_address: 172.28.0.3
+    volumes:
+      - ./license.properties:/opt/aem/license.properties:ro
+      - ./publish/quickstart:/opt/aem/crx-quickstart/bin/quickstartMe
+      - ./publish/stop:/opt/aem/crx-quickstart/bin/stopme
+      - ./runstop:/opt/aem/runstop
+      - ./dependencies:/opt/aem/crx-quickstart/install
+      - ./logs/publish:/opt/aem/crx-quickstart/logs
+    command: '/opt/aem/crx-quickstart/bin/quickstartMe'
+  dispatcher:
+    build: ./dispatcher
+    ports:
+      - "80:80"
+    networks:
+      local_net:
+        ipv4_address: 172.28.0.4
+    volumes:
+      - ./dispatcher/conf/apache/conf:/usr/local/apache2/conf
+      - ./dispatcher/conf/apache/conf.d:/usr/local/apache2/conf.d
+      - ./dispatcher/conf/apache/conf.dispatcher.d:/usr/local/apache2/conf.dispatcher.d
+      - ./dispatcher/conf/apache/conf.modules.d:/usr/local/apache2/conf.modules.d
+      - ./logs/dispatcher:/usr/local/apache2/logs
+        #entrypoint: ["sh", "-c", "sleep 2073600"]
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    networks:
+      local_net:
+        ipv4_address: 172.28.0.5
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+networks:
+  local_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.28.0.0/24"
 volumes:
-        portainer_data:    
+  portainer_data:
