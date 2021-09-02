@@ -17,7 +17,7 @@ services:
       - ./author/quickstart:/opt/aem/crx-quickstart/bin/quickstartMe
       - ./author/stop:/opt/aem/crx-quickstart/bin/stopme
       - ./runstop:/opt/aem/runstop
-      - ./dependencies:/opt/aem/crx-quickstart/install
+      - ./dependencies/author:/opt/aem/crx-quickstart/install
       - ./logs/author:/opt/aem/crx-quickstart/logs
     command: '/opt/aem/crx-quickstart/bin/quickstartMe'
   publish:
@@ -33,7 +33,7 @@ services:
       - ./publish/quickstart:/opt/aem/crx-quickstart/bin/quickstartMe
       - ./publish/stop:/opt/aem/crx-quickstart/bin/stopme
       - ./runstop:/opt/aem/runstop
-      - ./dependencies:/opt/aem/crx-quickstart/install
+      - ./dependencies/publish:/opt/aem/crx-quickstart/install
       - ./logs/publish:/opt/aem/crx-quickstart/logs
     command: '/opt/aem/crx-quickstart/bin/quickstartMe'
   dispatcher:
