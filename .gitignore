@@ -1,3 +1,5 @@
 *.jar
 *.rpm
 license.properties
+logs
+.idea/

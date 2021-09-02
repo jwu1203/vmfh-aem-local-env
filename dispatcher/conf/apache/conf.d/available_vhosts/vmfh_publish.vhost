@@ -18,7 +18,7 @@
 	<IfModule mod_headers.c>
 		## change it to be "publish 2" when deployed to publish2 disapatcher
 		Header add X-Vhost "publish 1"
-		Include /usr/local/apache2/conf.d/cache_rules/rwjf-expires.conf
+		Include /usr/local/apache2/conf.d/cache_rules/vmfh-expires.conf
 	</IfModule>
 	<Directory "${PUBLISH_DOCROOT}">
 		## Update /etc/sysconfig/httpd with setting the PUBLISH_WHITELIST_ENABLED from 0 or 1 to enable or disable ip restriction rules
@@ -77,13 +77,13 @@
 		#include the mod_rewrite rules
 		#Include /usr/local/apache2/conf.d/rewrites/base_rewrite.rules
 		#Include /usr/local/apache2/conf.d/rewrites/disable_methods.rules
-		Include /usr/local/apache2/conf.d/rewrites/rwjf-rewrite.rules
+		#Include /usr/local/apache2/conf.d/rewrites/rwjf-rewrite.rules
 		#Include /usr/local/apache2/conf.d/rewrites/coh-legacy-redirect_rewrite.rules
 		#Include /usr/local/apache2/conf.d/rewrites/rss-redirects_rewrite.rules
 		#Include /usr/local/apache2/conf.d/rewrites/legacy-redirects_rewrite.rules
 		#Include /usr/local/apache2/conf.d/rewrites/blog-urls-redirect_rewrite.rules
 		#Include /usr/local/apache2/conf.d/rewrites/vanity-redirects_rewrite.rules
-		Include /usr/local/apache2/conf.d/rewrites/rwjf-vanity-rewrite.rules
+		#Include /usr/local/apache2/conf.d/rewrites/rwjf-vanity-rewrite.rules
 
         #include the mod_alias rules
         #Include /usr/local/apache2/conf.d/rewrites/blog-urls-alias-redirect.rules
